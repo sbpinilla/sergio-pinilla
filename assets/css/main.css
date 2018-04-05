@@ -962,7 +962,7 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
   width: 100%;
   margin-bottom: 20px;
   font-size: 14px;
-  border-radius: 0;
+  /*border-radius: 0;*/
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   transition: all 0.3s;
@@ -1135,4 +1135,17 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
 
 .btn-send{
   width: 100%;
+}
+
+textarea {
+  resize: none;
+}
+
+.marca-sb{
+  color: #fff;
+}
+
+
+.marca-pinilla{
+  color: #ccc;
 }

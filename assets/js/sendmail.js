@@ -1,71 +1,79 @@
+//update this with your js_form selector
+var form_id_js = "javascript_form";
 
-  //update this with your js_form selector
-  var form_id_js = "javascript_form";
+var data_js = {
+    "access_token": "s5uum4fhz6zmjol1u1wbnoap"
+};
+var sendButton = document.getElementById("js_send");
 
-  var data_js = {
-      "access_token": "s5uum4fhz6zmjol1u1wbnoap"
-  };
-  var sendButton = document.getElementById("js_send");
+function js_onSuccess() {
+    // remove this to avoid redirect
+    // window.location = window.location.pathname + "?message=Email+Successfully+Sent%21&isError=0";
+    alertify
+        .alert("Mensaje enviado", "Gracias por comunicarte con migo.", function () {
 
-  function js_onSuccess() {
-      // remove this to avoid redirect
-     // window.location = window.location.pathname + "?message=Email+Successfully+Sent%21&isError=0";
-     alertify
-     .alert("Mensaje enviado","Gracias por comunicarte con migo.", function(){
-         
         });
 
-        sendButton.value='Enviar';
-  }
+    sendButton.value = 'Enviar';
+}
 
-  function js_onError(error) {
-      // remove this to avoid redirect
-      //window.location = window.location.pathname + "?message=Email+could+not+be+sent.&isError=1";
-      alertify.error('No pudimos enviar tu mensaje');
-      sendButton.value='Enviar';
-  }
+function js_onError(error) {
+    // remove this to avoid redirect
+    //window.location = window.location.pathname + "?message=Email+could+not+be+sent.&isError=1";
+    alertify.error('No pudimos enviar tu mensaje');
+    sendButton.value = 'Enviar';
+}
 
- 
 
-  function js_send() {
-      sendButton.value='Enviando …';
-      sendButton.disabled=true;
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-          if (request.readyState == 4 && request.status == 200) {
-              js_onSuccess();
-          } else
-          if(request.readyState == 4) {
-              js_onError(request.response);
-          }
-      };
 
-      var subject = "Notificación de pagina web";
-      var message = document.querySelector("#" + form_id_js + " [name='text']").value;
-      data_js['subject'] = subject;
-      data_js['text'] = message;
-      var params = toParams(data_js);
+function js_send() {
 
-      request.open("POST", "https://postmail.invotes.com/send", true);
-      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    if (document.querySelector("#" + form_id_js + " [name='text']").value != "") {
 
-      request.send(params);
+        sendButton.value = 'Enviando …';
+        sendButton.disabled = true;
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.readyState == 4 && request.status == 200) {
+                js_onSuccess();
+            } else
+            if (request.readyState == 4) {
+                js_onError(request.response);
+            }
+        };
 
-      return false;
-  }
+        var subject = "Notificación de pagina web";
+        var message = document.querySelector("#" + form_id_js + " [name='text']").value;
+        data_js['subject'] = subject;
+        data_js['text'] = message;
+        var params = toParams(data_js);
 
-  sendButton.onclick = js_send;
+        request.open("POST", "https://postmail.invotes.com/send", true);
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-  function toParams(data_js) {
-      var form_data = [];
-      for ( var key in data_js ) {
-          form_data.push(encodeURIComponent(key) + "=" + encodeURIComponent(data_js[key]));
-      }
+        request.send(params);
 
-      return form_data.join("&");
-  }
+    } else {
+        alertify.error('Escribe un mensaje válido.');
+    }
 
-  var js_form = document.getElementById(form_id_js);
-  js_form.addEventListener("submit", function (e) {
-      e.preventDefault();
-  });
+
+
+    return false;
+}
+
+sendButton.onclick = js_send;
+
+function toParams(data_js) {
+    var form_data = [];
+    for (var key in data_js) {
+        form_data.push(encodeURIComponent(key) + "=" + encodeURIComponent(data_js[key]));
+    }
+
+    return form_data.join("&");
+}
+
+var js_form = document.getElementById(form_id_js);
+js_form.addEventListener("submit", function (e) {
+    e.preventDefault();
+});
